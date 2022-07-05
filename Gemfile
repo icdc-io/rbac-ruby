@@ -12,3 +12,5 @@ gem "rspec", "~> 3.0"
 gem "rubocop", "~> 1.21"
 
 gem "yaml", "~> 0.2.0"
+
+gem "activesupport", "~> 7.0"
