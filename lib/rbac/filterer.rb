@@ -15,7 +15,6 @@ module Rbac::Filterer
         complex_filters = filters.select { |filter| filter.is_a? Hash }
         filters.delete_if { |filter| filter.is_a? Hash }
 
-        puts "DEBUG filters #{filters}"
         relations = []
         complex_filters = complex_filters.inject(:merge).map do |model, fields|
           relations << model
