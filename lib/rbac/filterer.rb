@@ -3,7 +3,7 @@ module Rbac::Filterer
   extend ActiveSupport::Concern
 
   included do
-    def self.filtered(params)
+    def self.filtered
       require 'yaml'
 
       scopes_map = YAML.load File.open ENV['SCOPES_MAP_FILE']
