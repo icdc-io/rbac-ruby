@@ -3,15 +3,15 @@ module Rbac::Filterer
   extend ActiveSupport::Concern
 
   included do
-    def self.filtered
+    def self.filtered(params)
       require 'yaml'
 
       scopes_map = YAML.load File.open ENV['SCOPES_MAP_FILE']
 
-      scope = filters = scopes_map[self.name][@role]['scope']
-      filters = scopes_map[self.name][@role]['filters']
+      scope = filters = scopes_map[self.name][User.current_user.role]['scope']
+      filters = scopes_map[self.name][User.current_user.role]['filters']
 
-      filters ? where(filters.map { |f| { f => instance_variable_get("@#{f}") } }.reduce Hash.new, :merge) : self.send(scope)
+      filters ? where(filters.map { |f| { f => User.current_user.send(f) } }.reduce Hash.new, :merge) : self.send(scope)
     end
   end
 end
