@@ -14,8 +14,8 @@ module Rbac
     end
 
     def role_allows?(request)
-      controller, action, role = fetch_params_from_request(request)
-      config[:features][controller][action].include?(role)
+      controller, action = fetch_params_from_request(request)
+      config["features"][controller][action].include?(User.current_user.role)
     end
 
     private
@@ -23,8 +23,7 @@ module Rbac
     def fetch_params_from_request(request)
       controller = request.params[:controller]
       action = request.params[:action]
-      role = request.headers[config[:role_header]]
-      [controller, action, role]
+      [controller, action]
     end
   end
 end
