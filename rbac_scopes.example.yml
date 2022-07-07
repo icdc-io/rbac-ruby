@@ -1,0 +1,29 @@
+---
+HelpdeskSystem:
+  admin:
+    scope:
+      all
+  supporter:
+    filters:
+      region: region
+  guest:
+    filters:
+      region: region
+Project:
+  admin:
+    scope:
+      all
+  supporter:
+    parent: HelpdeskSystem
+  guest:
+    parent: HelpdeskSystem
+Request:
+  admin:
+    scope:
+      all
+  supporter:
+    parent: Project
+  guest:
+    parent: Project
+    filters:
+      requester: userid

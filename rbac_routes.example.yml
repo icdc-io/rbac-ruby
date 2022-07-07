@@ -1,0 +1,57 @@
+---
+features:
+  api/v1/helpdesk_systems:
+    index:
+      - admin
+      - supporter
+      - guest
+    show:
+      - admin
+      - supporter
+      - guest
+    create:
+      - admin
+    destroy:
+      - admin
+    update:
+      - admin
+      - supporter
+  api/v1/projects:
+    index:
+      - admin
+      - supporter
+      - guest
+    show:
+      - admin
+      - supporter
+      - guest
+    create:
+      - admin
+      - supporter
+    update:
+      - admin
+      - supporter
+    destroy:
+      - admin
+      - supporter
+  api/v1/requests:
+    index:
+      - admin
+      - supporter
+      - guest
+    show:
+      - admin
+      - supporter
+      - guest
+    create:
+      - admin
+      - supporter
+      - guest
+    update:
+      - admin
+      - supporter
+      - guest
+    destroy:
+      - admin
+      - supporter
+      - guest

@@ -1,8 +1,6 @@
-# Rbac
+# RBAC Ruby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rbac`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple way to manage access and visibillity scopes to objects in your Rails applications.
 
 ## Installation
 
@@ -20,20 +18,56 @@ Or install it yourself as:
 
     $ gem install rbac
 
+## Requirements
+Your application should contain model User with methods `current_user` which will return attributes to filtering your objects.
+
+
 ## Usage
 
-TODO: Write usage instructions here
+Write config file with buissiness logic (see examples). Include Rbac modules into your application. And have fun :)
 
-## Development
+EXAMPLE:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Models:
+- HelpdeskSystem
+- Project
+- Request
+- User (can be abstract model)
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Relations:
+- HelpdeskSystem 1-M Project
+- Project 1-M Request
 
-## Contributing
+Roles:
+- admin (can see and modify each object in application)
+- supported (can see and modify each object in region)
+- guest (can see and modify own request into projects which available in region)
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rbac. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rbac/blob/master/CODE_OF_CONDUCT.md).
 
-## Code of Conduct
 
-Everyone interacting in the Rbac project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/rbac/blob/master/CODE_OF_CONDUCT.md).
+```ruby
+# For example class User.
+# Cause User.current_user IS REQUIRED for this gem
+class User
+  attr_reader :userid, :region, :role
+  thread_mattr_accessor :current_user
+
+  def initialize(opts)
+    @userid = opts[:userid]
+    @region = opts[:region]
+    @role = opts[:role]
+  end
+end
+```
+
+Define a [RBAC Routes file](https://github.com/ahrechushkin/rbac-ruby/blob/master/rbac_routes.example.yml) which configure access to controllers for autheticated users and include to your controllers and write custom buissiness logic.
+
+Define a [RBAC Scopes file](https://github.com/ahrechushkin/rbac-ruby/blob/master/rbac_scopes.examples.yml) which containe logic how our application will filter records and include Rbac::Filterer into app/models/application.rb (to include filtering method to all models) OR into specific model to use filtation only here. Now you can call Model.filtered (e.g. HelpdeskSystem.filtered, Project.filtered, Request.filtered)
+
+
+
+
+
+
+
+
