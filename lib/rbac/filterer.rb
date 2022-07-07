@@ -8,29 +8,30 @@ module Rbac::Filterer
 
       scopes_map = YAML.load File.open ENV['SCOPES_MAP_FILE']
 
-      scope = filters = scopes_map[self.name][User.current_user.role]['scope']
-      filters = scopes_map[self.name][User.current_user.role]['filters']
+      filters_config = scopes_map[self.name][User.current_user.role]
 
-      if filters
-        complex_filters = filters.select { |filter| filter.is_a? Hash }
-        filters.delete_if { |filter| filter.is_a? Hash }
+      filters = filters_config['filters']
+      scope = filters_config['scope']
+      parent = filters_config['parent']
 
-        relations = []
-        complex_filters = complex_filters.inject(:merge).map do |model, fields|
-          relations << model
-          {
-            model => fields.map do |field|
-                  {field => User.current_user.send(field)}
-                end.inject(:merge)
-          }
-        end.inject(:merge) unless complex_filters.empty?
-        unless relations.empty?
-          joins(relations.map(&:to_sym)).where(complex_filters.merge(filters.map { |f| { f => User.current_user.send(f) } }.reduce Hash.new, :merge))
+      # TODO: refactor it and remove complexity of this code 
+      if parent
+        if filters
+          additional_filters = filters.map { |field_name, attribute|  { field_name => User.current_user.send(attribute) } }.reduce Hash.new, :merge
+          parent.constantize.filtered.map do |parent_object|
+            where(additional_filters.merge(parent.downcase.to_sym => parent_object))
+          end.flatten
         else
-          where(filters.map { |f| { f => User.current_user.send(f) } }.reduce Hash.new, :merge)
+          parent.constantize.filtered.map do |parent_object|
+            where(parent.downcase.to_sym => parent_object)
+          end.flatten
         end
-      else
+      elsif filters
+        where(filters.map { |field_name, attribute|  { field_name => User.current_user.send(attribute) } }.reduce Hash.new, :merge)
+      elsif scope
         self.send(scope)
+      else
+        []
       end
     end
   end
