@@ -18,13 +18,9 @@ module Rbac::Filterer
       if parent
         if filters
           additional_filters = filters.map { |field_name, attribute|  { field_name => User.current_user.send(attribute) } }.reduce Hash.new, :merge
-          parent.constantize.filtered.map do |parent_object|
-            where(additional_filters.merge(parent.downcase.to_sym => parent_object))
-          end.flatten
+          where(additional_filters.merge(parent.downcase.to_sym => parent.constantize.filtered))
         else
-          parent.constantize.filtered.map do |parent_object|
-            where(parent.downcase.to_sym => parent_object)
-          end.flatten
+          where(parent.downcase.to_sym => parent.constantize.filtered)
         end
       elsif filters
         where(filters.map { |field_name, attribute|  { field_name => User.current_user.send(attribute) } }.reduce Hash.new, :merge)
