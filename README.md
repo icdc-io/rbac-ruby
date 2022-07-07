@@ -62,7 +62,7 @@ end
 
 Define a [RBAC Routes file](https://github.com/ahrechushkin/rbac-ruby/blob/master/rbac_routes.example.yml) which configure access to controllers for autheticated users and include to your controllers and write custom buissiness logic.
 
-Define a [RBAC Scopes file](https://github.com/ahrechushkin/rbac-ruby/blob/master/rbac_scopes.examples.yml) which containe logic how our application will filter records and include Rbac::Filterer into app/models/application.rb (to include filtering method to all models) OR into specific model to use filtation only here. Now you can call Model.filtered (e.g. HelpdeskSystem.filtered, Project.filtered, Request.filtered)
+Define a [RBAC Scopes file](https://github.com/ahrechushkin/rbac-ruby/blob/master/rbac_scopes.example.yml) which containe logic how our application will filter records and include Rbac::Filterer into app/models/application.rb (to include filtering method to all models) OR into specific model to use filtation only here. Now you can call Model.filtered (e.g. HelpdeskSystem.filtered, Project.filtered, Request.filtered)
 
 
 
