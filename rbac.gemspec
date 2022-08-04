@@ -3,7 +3,7 @@
 require_relative "lib/rbac/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "rbac"
+  spec.name = "rbac-ruby"
   spec.version = Rbac::VERSION
   spec.authors = ["Aliaksei Hrechushkin"]
   spec.email = ["ahrechushkin@ibagroup.eu"]
