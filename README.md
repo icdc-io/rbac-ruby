@@ -7,7 +7,7 @@ A simple way to manage access and visibillity scopes to objects in your Rails ap
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rbac'
+gem 'rbac-ruby'
 ```
 
 And then execute:
