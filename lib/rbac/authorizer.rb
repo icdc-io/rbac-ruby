@@ -3,27 +3,33 @@
 require "yaml"
 
 module Rbac
-  # Authorizer class is responsible for checking
+  # Authorizer module is responsible for checking
   # if user has access to perform some action.
-  class Authorizer
-    attr_reader :config
+  module Authorizer
+    require "active_support/concern"
+    extend ActiveSupport::Concern
 
-    # Load configuration from a YAML file.
-    def initialize(config_file)
-      @config = YAML.load_file(config_file)
+    def authorize_user(attrs)
+      Rbac::User.current = Rbac::User.new(**attrs)
     end
 
-    def role_allows?(request)
-      controller, action = fetch_params_from_request(request)
-      config["features"][controller][action].include?(User.current_user.role)
+    def user_role_authorized?
+      controller = params[:controller]
+      action = params[:action]
+      routes_config.dig("features", controller, action)&.include?(Rbac::User.current.role)
     end
 
     private
 
-    def fetch_params_from_request(request)
-      controller = request.params[:controller]
-      action = request.params[:action]
-      [controller, action]
+    # Load configuration from a YAML file.
+    def routes_config
+      @routes_config ||= YAML.safe_load_file(ENV.fetch("RBAC_ROUTES_FILE", "config/rbac_routes.yaml"))
     end
+  end
+end
+
+module ActionController
+  class API
+    include Rbac::Authorizer
   end
 end
